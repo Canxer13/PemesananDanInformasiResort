@@ -1,10 +1,23 @@
-Sistem Pemesanan dan Informasi Resort (Backend API)
+<p align="center">
+<!--
+GANTI DENGAN URL LOGO ANDA NANTI SETELAH DIUNGGAH KE REPO.
+Contoh: <img src="https:"//https://www.google.com/search?q=github.com/Canxer13/PemesananDanInformasiResort/blob/main/logo.png%3Fraw%3Dtrue" width="200" alt="Logo De Tuna Resort">
+-->
+<h1 align="center">Sistem Pemesanan dan Informasi Resort (Backend API)</h1>
+</p>
 
-Ini adalah repositori untuk backend (API) dari "Sistem Pemesanan dan Informasi Resort Berbasis Web," sebuah proyek Capstone Project untuk Mata Kuliah Desain Dan Implementasi Framework Programming.
+<p align="center">
+<img src="https://www.google.com/search?q=https://img.shields.io/badge/Laravel-11-FF2D20%3Fstyle%3Dfor-the-badge%26logo%3Dlaravel" alt="Laravel 11">
+<img src="https://www.google.com/search?q=https://img.shields.io/badge/PHP-8.2%252B-777BB4%3Fstyle%3Dfor-the-badge%26logo%3Dphp" alt="PHP 8.2+">
+<img src="https://www.google.com/search?q=https://img.shields.io/badge/Database-MySQL-4479A1%3Fstyle%3Dfor-the-badge%26logo%3Dmysql" alt="MySQL">
+<img src="https://www.google.com/search?q=https://img.shields.io/badge/Build-Passing-brightgreen%3Fstyle%3Dfor-the-badge%26logo%3Dgithubactions" alt="Build Passing">
+</p>
+
+Ini adalah repositori untuk backend (API) dari Sistem Pemesanan dan Informasi Resort Berbasis Web, sebuah proyek Capstone Project untuk Mata Kuliah Desain Dan Implementasi Framework Programming.
 
 Proyek ini dibangun menggunakan Laravel 11 dan menyediakan API yang aman, cepat, dan terstruktur (RESTful) untuk menangani semua logika bisnis yang diperlukan oleh sebuah sistem reservasi modern.
 
-1. Latar Belakang Proyek
+1. 📜 Latar Belakang Proyek
 
 Di industri pariwisata modern, sistem pemesanan manual sering menimbulkan masalah seperti kesalahan pencatatan, informasi ketersediaan yang tidak real-time, dan proses yang lambat.
 
@@ -16,7 +29,7 @@ Membantu pengelola (Admin) mengelola data pemesanan secara efisien dan rapi.
 
 Menyediakan fondasi untuk media promosi yang dinamis.
 
-2. Teknologi yang Digunakan
+2. 🛠️ Teknologi yang Digunakan
 
 Framework: Laravel 11
 
@@ -32,7 +45,7 @@ Validasi: Form Request Bawaan Laravel
 
 Lingkungan: Docker (opsional) atau Laragon
 
-3. Fitur Utama API
+3. ✨ Fitur Utama API
 
 API ini mencakup 100% kebutuhan fungsional yang dijabarkan dalam proposal, dibagi berdasarkan peran pengguna:
 
@@ -102,7 +115,7 @@ GET /superadmin/reports/occupancy: Melihat laporan okupansi.
 
 GET /superadmin/logs: [FITUR LENGKAP] Melihat log aktivitas sistem (audit trail).
 
-4. Panduan Instalasi Lokal
+4. 🚀 Panduan Instalasi Lokal
 
 Untuk menjalankan proyek ini di komputer Anda:
 
@@ -150,7 +163,7 @@ php artisan serve
 
 Server Anda akan berjalan di http://127.0.0.1:8000.
 
-5. Dokumentasi API (Swagger)
+5. 📚 Dokumentasi API (Swagger)
 
 Seluruh API ini didokumentasikan sepenuhnya menggunakan Swagger (OpenAPI).
 
@@ -162,7 +175,7 @@ Jika Anda melakukan perubahan pada anotasi @OA di controller atau model, jalanka
 
 php artisan l5-swagger:generate
 
-6. Tim Pengembang
+6. 👥 Tim Pengembang
 
 Proyek ini disusun oleh tim dari Program Studi Teknik Informatika S-1, Institut Teknologi Nasional Malang:
 
