@@ -1,188 +1,170 @@
 <p align="center">
-<!--
-GANTI DENGAN URL LOGO ANDA NANTI SETELAH DIUNGGAH KE REPO.
-Contoh: <img src="https:"//https://www.google.com/search?q=github.com/Canxer13/PemesananDanInformasiResort/blob/main/logo.png%3Fraw%3Dtrue" width="200" alt="Logo De Tuna Resort">
--->
-<h1 align="center">Sistem Pemesanan dan Informasi Resort (Backend API)</h1>
+  <!-- 
+    GANTI DENGAN URL LOGO ANDA NANTI SETELAH DIUNGGAH KE REPO.
+    Contoh: <img src="https://github.com/Canxer13/PemesananDanInformasiResort/blob/main/logo.png?raw=true" width="200" alt="Logo De Tuna Resort"> 
+  -->
+  <h1 align="center">Sistem Pemesanan dan Informasi Resort (Backend API)</h1>
 </p>
 
 <p align="center">
-<img src="https://www.google.com/search?q=https://img.shields.io/badge/Laravel-11-FF2D20%3Fstyle%3Dfor-the-badge%26logo%3Dlaravel" alt="Laravel 11">
-<img src="https://www.google.com/search?q=https://img.shields.io/badge/PHP-8.2%252B-777BB4%3Fstyle%3Dfor-the-badge%26logo%3Dphp" alt="PHP 8.2+">
-<img src="https://www.google.com/search?q=https://img.shields.io/badge/Database-MySQL-4479A1%3Fstyle%3Dfor-the-badge%26logo%3Dmysql" alt="MySQL">
-<img src="https://www.google.com/search?q=https://img.shields.io/badge/Build-Passing-brightgreen%3Fstyle%3Dfor-the-badge%26logo%3Dgithubactions" alt="Build Passing">
+  <img src="https://img.shields.io/badge/Laravel-11-FF2D20?style=for-the-badge&logo=laravel" alt="Laravel 11">
+  <img src="https://img.shields.io/badge/PHP-8.2%2B-777BB4?style=for-the-badge&logo=php" alt="PHP 8.2+">
+  <img src="https://img.shields.io/badge/Database-MySQL-4479A1?style=for-the-badge&logo=mysql" alt="MySQL">
+  <img src="https://img.shields.io/badge/Build-Passing-brightgreen?style=for-the-badge&logo=githubactions" alt="Build Passing">
 </p>
 
-Ini adalah repositori untuk backend (API) dari Sistem Pemesanan dan Informasi Resort Berbasis Web, sebuah proyek Capstone Project untuk Mata Kuliah Desain Dan Implementasi Framework Programming.
+Ini adalah repositori untuk backend (API) dari **Sistem Pemesanan dan Informasi Resort Berbasis Web**, sebuah proyek Capstone Project untuk Mata Kuliah Desain Dan Implementasi Framework Programming.
 
-Proyek ini dibangun menggunakan Laravel 11 dan menyediakan API yang aman, cepat, dan terstruktur (RESTful) untuk menangani semua logika bisnis yang diperlukan oleh sebuah sistem reservasi modern.
+Proyek ini dibangun menggunakan **Laravel 11** dan menyediakan API yang aman, cepat, dan terstruktur (RESTful) untuk menangani semua logika bisnis yang diperlukan oleh sebuah sistem reservasi modern.
 
-1. 📜 Latar Belakang Proyek
+---
 
-Di industri pariwisata modern, sistem pemesanan manual sering menimbulkan masalah seperti kesalahan pencatatan, informasi ketersediaan yang tidak real-time, dan proses yang lambat.
+## 1. 📜 Latar Belakang Proyek
 
-Proyek ini dirancang untuk menyelesaikan masalah tersebut dengan menyediakan backend API terpusat yang:
+Di industri pariwisata modern, sistem pemesanan manual sering menimbulkan masalah seperti kesalahan pencatatan, informasi ketersediaan yang tidak _real-time_, dan proses yang lambat.
 
-Memberikan informasi ketersediaan kamar, harga, dan fasilitas secara real-time.
+Proyek ini dirancang untuk menyelesaikan masalah tersebut dengan menyediakan _backend_ API terpusat yang:
 
-Membantu pengelola (Admin) mengelola data pemesanan secara efisien dan rapi.
+-   Memberikan informasi ketersediaan kamar, harga, dan fasilitas secara _real-time_.
+-   Membantu pengelola (Admin) mengelola data pemesanan secara efisien dan rapi.
+-   Menyediakan fondasi untuk media promosi yang dinamis.
 
-Menyediakan fondasi untuk media promosi yang dinamis.
+---
 
-2. 🛠️ Teknologi yang Digunakan
+## 2. 🛠️ Teknologi yang Digunakan
 
-Framework: Laravel 11
+-   **Framework:** Laravel 11
+-   **Bahasa:** PHP 8.2+
+-   **Database:** MySQL
+-   **Autentikasi:** Laravel Sanctum (Token-based API)
+-   **Dokumentasi API:** L5-Swagger (OpenAPI)
+-   **Validasi:** Form Request Bawaan Laravel
+-   **Lingkungan:** Docker (opsional) atau Laragon
 
-Bahasa: PHP 8.2+
+---
 
-Database: MySQL
-
-Autentikasi: Laravel Sanctum (Token-based API)
-
-Dokumentasi API: L5-Swagger (OpenAPI)
-
-Validasi: Form Request Bawaan Laravel
-
-Lingkungan: Docker (opsional) atau Laragon
-
-3. ✨ Fitur Utama API
+## 3. ✨ Fitur Utama API
 
 API ini mencakup 100% kebutuhan fungsional yang dijabarkan dalam proposal, dibagi berdasarkan peran pengguna:
 
-3.1. Rute Publik (Tamu)
+### 3.1. Rute Publik (Tamu)
 
-POST /register: Registrasi akun pelanggan baru.
+-   `POST /register`: Registrasi akun pelanggan baru.
+-   `POST /login`: Login dan mendapatkan token Sanctum.
+-   `GET /rooms`: Melihat semua daftar kamar.
+-   `GET /rooms/{id}`: Melihat detail, foto, dan fasilitas satu kamar.
+-   `POST /rooms/check-availability`: Mengecek ketersediaan kamar pada tanggal tertentu.
+-   `GET /resort-facilities`: Melihat fasilitas umum resort.
+-   `GET /promotions`: Melihat promo yang sedang aktif.
+-   `POST /contact-messages`: Mengirim pesan lewat form kontak.
+-   `GET /rooms/{id}/reviews`: Melihat ulasan publik untuk sebuah kamar.
 
-POST /login: Login dan mendapatkan token Sanctum.
+### 3.2. Rute Pelanggan (Terautentikasi)
 
-GET /rooms: Melihat semua daftar kamar.
+-   `POST /logout`: Logout dan menghapus token.
+-   `GET /me`: Mendapatkan detail profil pengguna yang sedang login.
+-   `PUT /me/profile`: Memperbarui profil (nama, no. HP).
+-   `PUT /me/password`: Mengganti password.
+-   `POST /bookings`: Membuat pemesanan baru.
+-   `GET /my-bookings`: Melihat riwayat pemesanan pribadi.
+-   `POST /reviews`: Mengirim ulasan untuk _booking_ yang sudah selesai.
 
-GET /rooms/{id}: Melihat detail, foto, dan fasilitas satu kamar.
+### 3.3. Rute Admin (Peran: `admin`, `super_admin`)
 
-POST /rooms/check-availability: Mengecek ketersediaan kamar pada tanggal tertentu.
+-   `GET /admin/bookings`: Melihat _semua_ pemesanan.
+-   `PUT /admin/bookings/{id}/status`: Mengubah status pemesanan (confirmed, canceled, dll).
+-   `GET/POST/PUT/DELETE /admin/rooms`: CRUD penuh untuk data kamar.
+-   `GET/POST/PUT/DELETE /admin/resort-facilities`: CRUD penuh untuk fasilitas umum.
+-   `GET/POST/PUT/DELETE /admin/promotions`: CRUD penuh untuk data promo.
+-   `GET /admin/messages`: Melihat semua pesan kontak masuk.
+-   `DELETE /admin/messages/{id}`: Menghapus pesan.
 
-GET /resort-facilities: Melihat fasilitas umum resort.
+### 3.4. Rute Super Admin (Peran: `super_admin`)
 
-GET /promotions: Melihat promo yang sedang aktif.
+-   `GET /superadmin/users`: Melihat semua akun pengguna dan admin.
+-   `POST /superadmin/users/admin`: Membuat akun Admin baru.
+-   `DELETE /superadmin/users/{id}`: Menghapus akun.
+-   `GET /superadmin/reports/bookings`: Melihat laporan pendapatan.
+-   `GET /superadmin/reports/occupancy`: Melihat laporan okupansi.
+-   `GET /superadmin/logs`: **[FITUR LENGKAP]** Melihat log aktivitas sistem (audit trail).
 
-POST /contact-messages: Mengirim pesan lewat form kontak.
+---
 
-GET /rooms/{id}/reviews: Melihat ulasan publik untuk sebuah kamar.
-
-3.2. Rute Pelanggan (Terautentikasi)
-
-POST /logout: Logout dan menghapus token.
-
-GET /me: Mendapatkan detail profil pengguna yang sedang login.
-
-PUT /me/profile: Memperbarui profil (nama, no. HP).
-
-PUT /me/password: Mengganti password.
-
-POST /bookings: Membuat pemesanan baru.
-
-GET /my-bookings: Melihat riwayat pemesanan pribadi.
-
-POST /reviews: Mengirim ulasan untuk booking yang sudah selesai.
-
-3.3. Rute Admin (Peran: admin, super_admin)
-
-GET /admin/bookings: Melihat semua pemesanan.
-
-PUT /admin/bookings/{id}/status: Mengubah status pemesanan (confirmed, canceled, dll).
-
-GET/POST/PUT/DELETE /admin/rooms: CRUD penuh untuk data kamar.
-
-GET/POST/PUT/DELETE /admin/resort-facilities: CRUD penuh untuk fasilitas umum.
-
-GET/POST/PUT/DELETE /admin/promotions: CRUD penuh untuk data promo.
-
-GET /admin/messages: Melihat semua pesan kontak masuk.
-
-DELETE /admin/messages/{id}: Menghapus pesan.
-
-3.4. Rute Super Admin (Peran: super_admin)
-
-GET /superadmin/users: Melihat semua akun pengguna dan admin.
-
-POST /superadmin/users/admin: Membuat akun Admin baru.
-
-DELETE /superadmin/users/{id}: Menghapus akun.
-
-GET /superadmin/reports/bookings: Melihat laporan pendapatan.
-
-GET /superadmin/reports/occupancy: Melihat laporan okupansi.
-
-GET /superadmin/logs: [FITUR LENGKAP] Melihat log aktivitas sistem (audit trail).
-
-4. 🚀 Panduan Instalasi Lokal
+## 4. 🚀 Panduan Instalasi Lokal
 
 Untuk menjalankan proyek ini di komputer Anda:
 
-Clone Repositori
+1.  **Clone Repositori**
 
-git clone [https://github.com/Canxer13/PemesananDanInformasiResort.git](https://github.com/Canxer13/PemesananDanInformasiResort.git)
-cd PemesananDanInformasiResort
+    ```bash
+    git clone [https://github.com/Canxer13/PemesananDanInformasiResort.git](https://github.com/Canxer13/PemesananDanInformasiResort.git)
+    cd PemesananDanInformasiResort
+    ```
 
-Install Dependensi
+2.  **Install Dependensi**
 
-composer install
+    ```bash
+    composer install
+    ```
 
-Buat File .env
-Salin file .env.example menjadi file .env baru.
+3.  **Buat File `.env`**
+    Salin file `.env.example` menjadi file `.env` baru.
 
-cp .env.example .env
+    ```bash
+    cp .env.example .env
+    ```
 
-Generate Kunci Aplikasi
+4.  **Generate Kunci Aplikasi**
 
-php artisan key:generate
+    ```bash
+    php artisan key:generate
+    ```
 
-Atur Database
+5.  **Atur Database**
 
-Buka file .env Anda.
+    -   Buka file `.env` Anda.
+    -   Sesuaikan pengaturan `DB_` (database). Jika Anda menggunakan Laragon, konfigurasinya biasanya:
+        ```env
+        DB_CONNECTION=mysql
+        DB_HOST=127.0.0.1
+        DB_PORT=3306
+        DB_DATABASE=detuna_resort
+        DB_USERNAME=root
+        DB_PASSWORD=
+        ```
+    -   Pastikan Anda sudah membuat database bernama `detuna_resort` di Laragon (via HeidiSQL/phpMyAdmin).
 
-Sesuaikan pengaturan DB\_ (database). Jika Anda menggunakan Laragon, konfigurasinya biasanya:
+6.  **Jalankan Migrasi Database**
+    Perintah ini akan membuat semua tabel yang diperlukan (Users, Rooms, Bookings, dll).
 
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=detuna_resort
-DB_USERNAME=root
-DB_PASSWORD=
+    ```bash
+    php artisan migrate:fresh
+    ```
 
-Pastikan Anda sudah membuat database bernama detuna_resort di Laragon (via HeidiSQL/phpMyAdmin).
+7.  **Jalankan Server Lokal**
+    ```bash
+    php artisan serve
+    ```
+    Server Anda akan berjalan di `http://127.0.0.1:8000`.
 
-Jalankan Migrasi Database
-Perintah ini akan membuat semua tabel yang diperlukan (Users, Rooms, Bookings, dll).
+---
 
-php artisan migrate:fresh
+## 5. 📚 Dokumentasi API (Swagger)
 
-Jalankan Server Lokal
-
-php artisan serve
-
-Server Anda akan berjalan di http://127.0.0.1:8000.
-
-5. 📚 Dokumentasi API (Swagger)
-
-Seluruh API ini didokumentasikan sepenuhnya menggunakan Swagger (OpenAPI).
+Seluruh API ini didokumentasikan sepenuhnya menggunakan **Swagger (OpenAPI)**.
 
 Setelah server Anda berjalan (langkah 7), Anda dapat mengakses dokumentasi API interaktif yang lengkap di browser Anda pada URL:
 
-http://127.0.0.1:8000/api/documentation
+[**http://127.0.0.1:8000/api/documentation**](http://127.0.0.1:8000/api/documentation)
 
-Jika Anda melakukan perubahan pada anotasi @OA di controller atau model, jalankan perintah ini untuk memperbarui dokumentasi:
+Jika Anda melakukan perubahan pada anotasi `@OA` di _controller_ atau _model_, jalankan perintah ini untuk memperbarui dokumentasi:
 
+```bash
 php artisan l5-swagger:generate
 
-6. 👥 Tim Pengembang
-
-Proyek ini disusun oleh tim dari Program Studi Teknik Informatika S-1, Institut Teknologi Nasional Malang:
-
-I Putu Radith Sabiandika Pratama (2318091)
-
-Karis Ilham Maulana (2318093)
-
-Rangga Desta Pratama Putra (2318100)
-
-Chris M.O.L. Da Costa (2318101)
+TIM PENGEMBANG :
+- I Putu Radith Sabiandika Pratama
+- Karis Ilham Maulana
+- Rangga Desta Pratama Putra
+- Chris M.O.L. Da Costa
+```
