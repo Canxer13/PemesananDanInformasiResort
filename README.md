@@ -161,10 +161,13 @@ Jika Anda melakukan perubahan pada anotasi `@OA` di _controller_ atau _model_, j
 
 ```bash
 php artisan l5-swagger:generate
-
-TIM PENGEMBANG :
-- I Putu Radith Sabiandika Pratama
-- Karis Ilham Maulana
-- Rangga Desta Pratama Putra
-- Chris M.O.L. Da Costa
 ```
+
+---
+
+## TIM PENGEMBANG :
+
+-   I Putu Radith Sabiandika Pratama
+-   Karis Ilham Maulana
+-   Rangga Desta Pratama Putra
+-   Chris M.O.L. Da Costa
