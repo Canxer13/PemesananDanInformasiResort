@@ -1,0 +1,2171 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API De Tuna Resort",
+        "description": "Dokumentasi API untuk Sistem Informasi & Pemesanan De Tuna Resort",
+        "contact": {
+            "email": "admin@detuna.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000",
+            "description": "Server API De Tuna (Lokal - php artisan serve)"
+        },
+        {
+            "url": "http://detuna-api.test",
+            "description": "Server API De Tuna (Lokal - Laragon)"
+        }
+    ],
+    "paths": {
+        "/api/v1/admin/bookings": {
+            "get": {
+                "tags": [
+                    "Admin - Bookings"
+                ],
+                "summary": "Get semua data booking (Admin)",
+                "operationId": "3638e4bacbb3a5a5b3656adfbcd9ac83",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filter berdasarkan status booking (pending, confirmed, canceled, completed)",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Daftar semua booking",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Booking"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized (Token tidak valid)"
+                    },
+                    "403": {
+                        "description": "Forbidden (Tidak memiliki peran Admin)"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/bookings/{id}/status": {
+            "put": {
+                "tags": [
+                    "Admin - Bookings"
+                ],
+                "summary": "Update status booking (Admin)",
+                "operationId": "d16120958fdeaecbdd9e2091dac26182",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID Booking",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Status baru untuk booking",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "booking_status"
+                                ],
+                                "properties": {
+                                    "booking_status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "pending",
+                                            "confirmed",
+                                            "canceled",
+                                            "completed"
+                                        ],
+                                        "example": "confirmed"
+                                    },
+                                    "payment_status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "pending",
+                                            "paid",
+                                            "failed"
+                                        ],
+                                        "example": "paid"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Status booking berhasil diperbarui",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Booking"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Booking tidak ditemukan"
+                    },
+                    "422": {
+                        "description": "Validasi gagal (status tidak valid)"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/messages": {
+            "get": {
+                "tags": [
+                    "Admin - Messages"
+                ],
+                "summary": "Get semua pesan (Admin)",
+                "operationId": "cb8f8d4bb8fbb2c6dd4265a6e33a3df8",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "all",
+                                "read",
+                                "unread"
+                            ]
+                        },
+                        "example": "unread"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Daftar pesan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Message"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/messages/{id}": {
+            "get": {
+                "tags": [
+                    "Admin - Messages"
+                ],
+                "summary": "Get detail pesan (Admin)",
+                "operationId": "b49efc5353b5a64a322f02afe38d800e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detail pesan"
+                    },
+                    "404": {
+                        "description": "Pesan tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Admin - Messages"
+                ],
+                "summary": "Hapus pesan",
+                "operationId": "038e5f0cb6c565c1205dae6740510e03",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Pesan berhasil dihapus"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/messages/{id}/read": {
+            "put": {
+                "tags": [
+                    "Admin - Messages"
+                ],
+                "summary": "Tandai pesan sebagai 'sudah dibaca'",
+                "operationId": "7e4c7aae1363fe7ea47b2092b634eda4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Pesan ditandai dibaca"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/promotions": {
+            "get": {
+                "tags": [
+                    "Admin - Promotions"
+                ],
+                "summary": "Get semua promo (Admin)",
+                "operationId": "79739eda8aac9e3eac536f2758b384ef",
+                "responses": {
+                    "200": {
+                        "description": "Daftar promo",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Promotion"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Admin - Promotions"
+                ],
+                "summary": "Membuat promo baru",
+                "operationId": "b7e3e09cf11153739018e3b2cf52f470",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StorePromotionRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Promo berhasil dibuat",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Promotion"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/promotions/{id}": {
+            "get": {
+                "tags": [
+                    "Admin - Promotions"
+                ],
+                "summary": "Get detail promo (Admin)",
+                "operationId": "6ca9c643918c6d8f2ae20630439d813d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detail promo",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Promotion"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Promo tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Admin - Promotions"
+                ],
+                "summary": "Memperbarui promo (Update)",
+                "operationId": "5582d1cfedbf3d5ebe76b609b391afe2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdatePromotionRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Promo berhasil diperbarui",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Promotion"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Admin - Promotions"
+                ],
+                "summary": "Menghapus promo",
+                "operationId": "46d9d9b1ea5fd0f62a7d3a744d91185b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Promo berhasil dihapus"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/superadmin/reports/bookings": {
+            "get": {
+                "tags": [
+                    "Super Admin - Reports"
+                ],
+                "summary": "Laporan booking (Super Admin)",
+                "operationId": "453729974891f5cd0057a2ff70c2a6b5",
+                "parameters": [
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        },
+                        "example": "2025-01-01"
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        },
+                        "example": "2025-01-31"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Hasil laporan booking",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "total_revenue": {
+                                            "type": "number",
+                                            "format": "decimal",
+                                            "example": 150000000
+                                        },
+                                        "total_bookings": {
+                                            "type": "integer",
+                                            "example": 50
+                                        },
+                                        "top_rooms": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "room_name": {
+                                                        "type": "string",
+                                                        "example": "Deluxe Suite"
+                                                    },
+                                                    "booking_count": {
+                                                        "type": "integer",
+                                                        "example": 20
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/superadmin/reports/occupancy": {
+            "get": {
+                "tags": [
+                    "Super Admin - Reports"
+                ],
+                "summary": "Laporan tingkat hunian (Super Admin)",
+                "operationId": "bb488a996977bbbf22bf17143978e140",
+                "parameters": [
+                    {
+                        "name": "month",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    },
+                    {
+                        "name": "year",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 2025
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Hasil laporan hunian"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/resort-facilities": {
+            "get": {
+                "tags": [
+                    "Admin - Resort Facilities"
+                ],
+                "summary": "Get semua fasilitas resort (Admin)",
+                "operationId": "eb5780c66214992e2ae161ffe2ca1752",
+                "responses": {
+                    "200": {
+                        "description": "Daftar fasilitas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ResortFacility"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Admin - Resort Facilities"
+                ],
+                "summary": "Membuat fasilitas resort baru",
+                "operationId": "6033933c8167199efae5b4604d605334",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreResortFacilityRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Fasilitas berhasil dibuat",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResortFacility"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/resort-facilities/{id}": {
+            "get": {
+                "tags": [
+                    "Admin - Resort Facilities"
+                ],
+                "summary": "Get detail fasilitas (Admin)",
+                "operationId": "9b3ef14c9ea4eacf026e023ab40fd607",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detail fasilitas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResortFacility"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Fasilitas tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Admin - Resort Facilities"
+                ],
+                "summary": "Memperbarui fasilitas (Update)",
+                "description": "Menggunakan POST untuk update karena PUT/PATCH bermasalah dengan form-data/file upload",
+                "operationId": "2884c16282a2beb0525b738680ec6a22",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateResortFacilityRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Fasilitas berhasil diperbarui",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResortFacility"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Fasilitas tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Admin - Resort Facilities"
+                ],
+                "summary": "Menghapus fasilitas",
+                "operationId": "ae5924c07d442e69e2ca634b69fe6fe2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Fasilitas berhasil dihapus"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/rooms": {
+            "get": {
+                "tags": [
+                    "Admin - Rooms"
+                ],
+                "summary": "Get semua data kamar (Admin)",
+                "operationId": "ffc2ff0ddefa3129b7ff2aa7b4ff16c0",
+                "responses": {
+                    "200": {
+                        "description": "Daftar semua kamar",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Room"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Admin - Rooms"
+                ],
+                "summary": "Membuat kamar baru",
+                "operationId": "4099553fa5efb8b3ff893c348bc663ef",
+                "requestBody": {
+                    "description": "Data kamar baru",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreRoomRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Kamar berhasil dibuat",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Room"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validasi gagal"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/rooms/{id}": {
+            "get": {
+                "tags": [
+                    "Admin - Rooms"
+                ],
+                "summary": "Get detail kamar (Admin)",
+                "operationId": "86a5cb6714de6cb4e1e10d551678c561",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detail kamar",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Room"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Kamar tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Admin - Rooms"
+                ],
+                "summary": "Memperbarui kamar",
+                "operationId": "fcce3d66978900139e2ee3a024003429",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Data kamar yang diperbarui",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateRoomRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Kamar berhasil diperbarui",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Room"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Kamar tidak ditemukan"
+                    },
+                    "422": {
+                        "description": "Validasi gagal"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Admin - Rooms"
+                ],
+                "summary": "Menghapus kamar",
+                "operationId": "9094fa4f768d6131c908dfee4ea401b2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Kamar berhasil dihapus"
+                    },
+                    "404": {
+                        "description": "Kamar tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/superadmin/users": {
+            "get": {
+                "tags": [
+                    "Super Admin - Users"
+                ],
+                "summary": "Get semua data pengguna (Super Admin)",
+                "operationId": "1b9d16306b861109426982d43418d85b",
+                "responses": {
+                    "200": {
+                        "description": "Daftar semua pengguna",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/superadmin/users/admin": {
+            "post": {
+                "tags": [
+                    "Super Admin - Users"
+                ],
+                "summary": "Membuat akun Admin baru (Super Admin)",
+                "operationId": "09b9b21c70a9bbf3ab0504139b80ea0d",
+                "requestBody": {
+                    "description": "Data akun admin baru",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "full_name",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "full_name": {
+                                        "type": "string",
+                                        "example": "Admin Baru"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "adminbaru@detuna.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "passwordadmin123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Akun admin berhasil dibuat",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validasi gagal"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/superadmin/users/{id}": {
+            "delete": {
+                "tags": [
+                    "Super Admin - Users"
+                ],
+                "summary": "Menghapus pengguna (Super Admin)",
+                "operationId": "6c43f8ed96d7d1dfa2f2ddf0f292657d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Pengguna berhasil dihapus"
+                    },
+                    "404": {
+                        "description": "Pengguna tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Registrasi Pengguna Baru",
+                "operationId": "ad77fe138bcb384ad65d167d5c8d1cc0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "full_name",
+                                    "email",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "full_name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    },
+                                    "phone_number": {
+                                        "type": "string",
+                                        "example": "08123456789"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Registrasi berhasil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validasi gagal"
+                    }
+                }
+            }
+        },
+        "/api/v1/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login Pengguna",
+                "operationId": "bae68d1c55329ecb6e41f48285840c8f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login berhasil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "type": "string",
+                                            "example": "1|Abc..."
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Kredensial salah"
+                    }
+                }
+            }
+        },
+        "/api/v1/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout Pengguna",
+                "operationId": "c5cdd87fdbf9d0f95dede875bd023dec",
+                "responses": {
+                    "200": {
+                        "description": "Logout berhasil"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/me": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Get Data Pengguna (Current)",
+                "operationId": "13b43df400e475a157538f73617b8c3d",
+                "responses": {
+                    "200": {
+                        "description": "Data pengguna",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/bookings": {
+            "post": {
+                "tags": [
+                    "Bookings (Pelanggan)"
+                ],
+                "summary": "Membuat booking baru (Pelanggan)",
+                "operationId": "9ec8aa3de0d1efdd0cfe72c27eac745c",
+                "requestBody": {
+                    "description": "Data booking baru",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreBookingRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Booking berhasil dibuat",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Booking"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized (Token tidak valid)"
+                    },
+                    "422": {
+                        "description": "Validasi gagal (Data input tidak valid)"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/my-bookings": {
+            "get": {
+                "tags": [
+                    "Bookings (Pelanggan)"
+                ],
+                "summary": "Melihat riwayat booking (Pelanggan)",
+                "operationId": "52ff3343d858b466349c0b70c55476aa",
+                "responses": {
+                    "200": {
+                        "description": "Daftar riwayat booking",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Booking"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized (Token tidak valid)"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/contact-messages": {
+            "post": {
+                "tags": [
+                    "Messages (Publik)"
+                ],
+                "summary": "Kirim pesan kontak (Publik)",
+                "operationId": "e4ae7197b681276b6599be46d337cc5c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreMessageRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Pesan berhasil dikirim",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Message"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/rooms/{id}/reviews": {
+            "get": {
+                "tags": [
+                    "Reviews (Pelanggan & Publik)"
+                ],
+                "summary": "Get semua ulasan untuk satu kamar (Publik)",
+                "operationId": "a7da69fd8c0de5172939975860676d0e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "description": "Room ID",
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Daftar ulasan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "user_name": {
+                                                "type": "string",
+                                                "example": "Budi S."
+                                            },
+                                            "rating": {
+                                                "type": "integer",
+                                                "example": 5
+                                            },
+                                            "comment": {
+                                                "type": "string",
+                                                "example": "Keren!"
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Kamar tidak ditemukan"
+                    }
+                }
+            }
+        },
+        "/api/v1/reviews": {
+            "post": {
+                "tags": [
+                    "Reviews (Pelanggan & Publik)"
+                ],
+                "summary": "Membuat ulasan baru (Pelanggan)",
+                "operationId": "20f4daafc07903e8535348e0047f7920",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreReviewRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Ulasan berhasil dibuat",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Review"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validasi gagal"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/rooms": {
+            "get": {
+                "tags": [
+                    "Rooms (Public)"
+                ],
+                "summary": "Get Semua Kamar",
+                "operationId": "31a8839ec4012ed828bcc67b19738698",
+                "responses": {
+                    "200": {
+                        "description": "Daftar kamar",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Room"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/rooms/{id}": {
+            "get": {
+                "tags": [
+                    "Rooms (Public)"
+                ],
+                "summary": "Get Detail Kamar",
+                "operationId": "20e96d2b586955bc2a4d81fdbff8789d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detail kamar",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RoomWithRelations"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Kamar tidak ditemukan"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "StoreBookingRequest": {
+                "title": "Store Booking Request",
+                "required": [
+                    "room_id",
+                    "check_in_date",
+                    "check_out_date",
+                    "total_price"
+                ],
+                "properties": {
+                    "room_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "check_in_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-12-20"
+                    },
+                    "check_out_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-12-22"
+                    },
+                    "total_price": {
+                        "type": "number",
+                        "format": "decimal",
+                        "example": 5000000
+                    },
+                    "guests": {
+                        "description": "Jumlah tamu",
+                        "type": "integer",
+                        "example": 2
+                    }
+                },
+                "type": "object"
+            },
+            "StoreMessageRequest": {
+                "title": "Store Message Request",
+                "required": [
+                    "sender_name",
+                    "sender_email",
+                    "message_body"
+                ],
+                "properties": {
+                    "sender_name": {
+                        "type": "string",
+                        "example": "Pengunjung"
+                    },
+                    "sender_email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "pengunjung@mail.com"
+                    },
+                    "subject": {
+                        "type": "string",
+                        "example": "Pertanyaan kamar"
+                    },
+                    "message_body": {
+                        "type": "string",
+                        "example": "Halo, saya ingin bertanya..."
+                    }
+                },
+                "type": "object"
+            },
+            "StorePromotionRequest": {
+                "title": "Store Promotion Request",
+                "required": [
+                    "title",
+                    "description",
+                    "start_date",
+                    "end_date"
+                ],
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "example": "Promo Lebaran"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Deskripsi promo..."
+                    },
+                    "image_url": {
+                        "type": "string",
+                        "format": "uri",
+                        "example": "https://example.com/image.jpg"
+                    },
+                    "promo_code": {
+                        "type": "string",
+                        "example": "LEBARAN2025"
+                    },
+                    "start_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-04-01"
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-04-10"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreResortFacilityRequest": {
+                "title": "Store Resort Facility Request",
+                "required": [
+                    "name",
+                    "description"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Nama Fasilitas Baru"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Deskripsi fasilitas..."
+                    },
+                    "photo_url": {
+                        "type": "string",
+                        "format": "uri",
+                        "example": "https://example.com/image.jpg"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreReviewRequest": {
+                "title": "Store Review Request",
+                "required": [
+                    "booking_id",
+                    "rating"
+                ],
+                "properties": {
+                    "booking_id": {
+                        "type": "integer",
+                        "example": 101
+                    },
+                    "rating": {
+                        "type": "integer",
+                        "maximum": 5,
+                        "minimum": 1,
+                        "example": 5
+                    },
+                    "comment": {
+                        "type": "string",
+                        "example": "Sangat memuaskan!"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreRoomRequest": {
+                "title": "Store Room Request",
+                "required": [
+                    "name",
+                    "description",
+                    "price_per_night",
+                    "capacity"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Suite Mewah"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Deskripsi lengkap suite mewah."
+                    },
+                    "price_per_night": {
+                        "type": "number",
+                        "format": "decimal",
+                        "example": 5000000
+                    },
+                    "capacity": {
+                        "type": "integer",
+                        "example": 4
+                    },
+                    "size": {
+                        "type": "string",
+                        "example": "100 m²"
+                    },
+                    "bed_type": {
+                        "type": "string",
+                        "example": "2 King Beds"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "available",
+                            "maintenance"
+                        ],
+                        "example": "available"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdatePromotionRequest": {
+                "title": "Update Promotion Request",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "example": "Promo Liburan Sekolah (Update)"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Deskripsi promo yang baru."
+                    },
+                    "image_url": {
+                        "type": "string",
+                        "format": "uri",
+                        "example": "https://example.com/image-baru.jpg"
+                    },
+                    "start_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-06-16"
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-07-16"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateResortFacilityRequest": {
+                "title": "Update Resort Facility Request",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Nama Fasilitas (Update)"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Deskripsi baru..."
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateRoomRequest": {
+                "title": "Update Room Request",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Suite Mewah (Renovasi)"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Deskripsi baru."
+                    },
+                    "price_per_night": {
+                        "type": "number",
+                        "format": "decimal",
+                        "example": 5500000
+                    },
+                    "capacity": {
+                        "type": "integer",
+                        "example": 4
+                    },
+                    "size": {
+                        "type": "string",
+                        "example": "110 m²"
+                    },
+                    "bed_type": {
+                        "type": "string",
+                        "example": "2 King Beds"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "available",
+                            "maintenance"
+                        ],
+                        "example": "maintenance"
+                    }
+                },
+                "type": "object"
+            },
+            "Booking": {
+                "title": "Booking",
+                "description": "Model Pemesanan",
+                "properties": {
+                    "booking_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "booking_code": {
+                        "type": "string",
+                        "example": "DT-20251021-XYZ"
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "room_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "check_in_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-12-20"
+                    },
+                    "check_out_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-12-22"
+                    },
+                    "total_price": {
+                        "type": "number",
+                        "format": "decimal",
+                        "example": 5000000
+                    },
+                    "booking_status": {
+                        "type": "string",
+                        "enum": [
+                            "pending",
+                            "confirmed",
+                            "canceled",
+                            "completed"
+                        ],
+                        "example": "pending"
+                    },
+                    "payment_status": {
+                        "type": "string",
+                        "enum": [
+                            "pending",
+                            "paid",
+                            "failed"
+                        ],
+                        "example": "pending"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "Message": {
+                "title": "Message",
+                "description": "Model Pesan Kontak",
+                "properties": {
+                    "message_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "sender_name": {
+                        "type": "string",
+                        "example": "Budi"
+                    },
+                    "sender_email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "budi@example.com"
+                    },
+                    "subject": {
+                        "type": "string",
+                        "example": "Pertanyaan"
+                    },
+                    "message_body": {
+                        "type": "string",
+                        "example": "Apakah tersedia..."
+                    },
+                    "is_read": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "Promotion": {
+                "title": "Promotion",
+                "description": "Model Promo Resort",
+                "properties": {
+                    "promo_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Diskon Liburan Sekolah"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Diskon 30% untuk pemesanan di bulan Juni."
+                    },
+                    "image_url": {
+                        "type": "string",
+                        "format": "uri",
+                        "example": "https://example.com/promo.jpg"
+                    },
+                    "start_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-06-01"
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-06-30"
+                    }
+                },
+                "type": "object"
+            },
+            "ResortFacility": {
+                "title": "Resort Facility",
+                "description": "Model Fasilitas Umum Resort",
+                "properties": {
+                    "resort_facility_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Infinity Pool"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Kolam renang tanpa batas menghadap laut."
+                    },
+                    "photo_url": {
+                        "type": "string",
+                        "format": "uri",
+                        "example": "https://example.com/pool.jpg"
+                    }
+                },
+                "type": "object"
+            },
+            "Review": {
+                "title": "Review",
+                "description": "Model Ulasan Pelanggan",
+                "properties": {
+                    "review_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "booking_id": {
+                        "type": "integer",
+                        "example": 101
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "rating": {
+                        "type": "integer",
+                        "maximum": 5,
+                        "minimum": 1,
+                        "example": 5
+                    },
+                    "comment": {
+                        "type": "string",
+                        "example": "Pelayanan sangat memuaskan!"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "Room": {
+                "title": "Room",
+                "description": "Model Tipe Kamar",
+                "properties": {
+                    "room_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Deluxe Ocean View"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Kamar indah dengan pemandangan laut."
+                    },
+                    "price_per_night": {
+                        "type": "number",
+                        "format": "decimal",
+                        "example": 2500000
+                    },
+                    "capacity": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "size": {
+                        "type": "string",
+                        "example": "45 m²"
+                    },
+                    "bed_type": {
+                        "type": "string",
+                        "example": "1 King Bed"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "available",
+                            "maintenance"
+                        ],
+                        "example": "available"
+                    }
+                },
+                "type": "object"
+            },
+            "RoomWithRelations": {
+                "title": "Room With Relations",
+                "description": "Model Kamar dengan relasi foto dan fasilitas",
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Room"
+                    },
+                    {
+                        "properties": {
+                            "photos": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/RoomPhoto"
+                                }
+                            },
+                            "facilities": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/RoomFacility"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
+            },
+            "RoomFacility": {
+                "title": "Room Facility",
+                "description": "Model Fasilitas di dalam Kamar",
+                "properties": {
+                    "facility_id": {
+                        "type": "integer",
+                        "example": 201
+                    },
+                    "room_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "facility_name": {
+                        "type": "string",
+                        "example": "Wi-Fi Gratis"
+                    }
+                },
+                "type": "object"
+            },
+            "RoomPhoto": {
+                "title": "Room Photo",
+                "description": "Model Foto Kamar",
+                "properties": {
+                    "photo_id": {
+                        "type": "integer",
+                        "example": 101
+                    },
+                    "room_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "photo_url": {
+                        "type": "string",
+                        "format": "url",
+                        "example": "http://example.com/images/room1.jpg"
+                    },
+                    "is_primary": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "title": "User",
+                "description": "Model Pengguna",
+                "properties": {
+                    "user_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "full_name": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "john@example.com"
+                    },
+                    "phone_number": {
+                        "type": "string",
+                        "example": "08123456789"
+                    },
+                    "role": {
+                        "type": "string",
+                        "enum": [
+                            "pelanggan",
+                            "admin",
+                            "super_admin"
+                        ],
+                        "example": "pelanggan"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "sanctum": {
+                "type": "http",
+                "description": "Masukkan token (Bearer Token)",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Admin - Bookings",
+            "description": "Endpoint untuk manajemen booking oleh Admin"
+        },
+        {
+            "name": "Admin - Messages",
+            "description": "Endpoint untuk manajemen pesan kontak oleh Admin"
+        },
+        {
+            "name": "Admin - Promotions",
+            "description": "Endpoint untuk manajemen promo oleh Admin"
+        },
+        {
+            "name": "Super Admin - Reports",
+            "description": "Endpoint untuk laporan dan analitik (Super Admin)"
+        },
+        {
+            "name": "Admin - Resort Facilities",
+            "description": "Endpoint untuk manajemen fasilitas umum resort oleh Admin"
+        },
+        {
+            "name": "Admin - Rooms",
+            "description": "Endpoint untuk manajemen kamar oleh Admin"
+        },
+        {
+            "name": "Super Admin - Users",
+            "description": "Endpoint untuk manajemen user oleh Super Admin"
+        },
+        {
+            "name": "Bookings (Pelanggan)",
+            "description": "Endpoint untuk pelanggan membuat dan melihat booking mereka"
+        },
+        {
+            "name": "Messages (Publik)",
+            "description": "Endpoint untuk form kontak publik"
+        },
+        {
+            "name": "Reviews (Pelanggan & Publik)",
+            "description": "Endpoint untuk mengelola ulasan"
+        },
+        {
+            "name": "Auth",
+            "description": "Auth"
+        },
+        {
+            "name": "Rooms (Public)",
+            "description": "Rooms (Public)"
+        }
+    ],
+    "security": {
+        "sanctum": {
+            "type": "http",
+            "description": "Masukkan Bearer Token (Sanctum)",
+            "scheme": "bearer",
+            "bearerFormat": "JWT"
+        }
+    }
+}
