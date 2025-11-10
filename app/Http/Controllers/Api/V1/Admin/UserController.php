@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
 use OpenApi\Annotations as OA;
+use App\Http\Requests\UpdateUserRequest;
 
 /**
  * @OA\Tag(
@@ -16,6 +17,39 @@ use OpenApi\Annotations as OA;
  */
 class UserController extends Controller
 {
+    /**
+     * @OA\Put(
+     * path="/api/v1/superadmin/users/{id}",
+     * summary="Update data pengguna (Super Admin)",
+     * tags={"Super Admin - Users"},
+     * security={{"sanctum":{}}},
+     * @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     * @OA\RequestBody(
+     * required=true,
+     * @OA\JsonContent(
+     * @OA\Property(property="full_name", type="string", example="Admin Diedit"),
+     * @OA\Property(property="email", type="string", format="email", example="adminbaru@detuna.com"),
+     * @OA\Property(property="role", type="string", enum={"pelanggan", "admin"}, example="admin")
+     * )
+     * ),
+     * @OA\Response(response=200, description="Pengguna berhasil diupdate", @OA\JsonContent(ref="#/components/schemas/User")),
+     * @OA\Response(response=404, description="Pengguna tidak ditemukan"),
+     * @OA\Response(response=422, description="Validasi gagal")
+     * )
+     */
+    public function update(UpdateUserRequest $request, $id)
+    {
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json(['success' => false, 'message' => 'Pengguna tidak ditemukan.'], 404);
+        }
+
+        $validatedData = $request->validated();
+        $user->update($validatedData);
+
+        return response()->json(['success' => true, 'message' => 'Pengguna berhasil diupdate.', 'data' => $user]);
+    }
+    
     /**
      * @OA\Get(
      * path="/api/v1/superadmin/users",

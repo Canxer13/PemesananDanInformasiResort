@@ -19,6 +19,53 @@
         }
     ],
     "paths": {
+        "/api/v1/superadmin/logs": {
+            "get": {
+                "tags": [
+                    "Super Admin - Activity Log"
+                ],
+                "summary": "Melihat semua log aktivitas (Super Admin)",
+                "operationId": "fd6dd2d8814d4c8b8aa214fb2de8e099",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 15
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Daftar log aktivitas (paginasi)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ActivityLog"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/admin/bookings": {
             "get": {
                 "tags": [
@@ -928,6 +975,107 @@
                 ]
             }
         },
+        "/api/v1/superadmin/users/{id}": {
+            "put": {
+                "tags": [
+                    "Super Admin - Users"
+                ],
+                "summary": "Update data pengguna (Super Admin)",
+                "operationId": "e0e70fb48717d5e49f44ec956421bc7f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "full_name": {
+                                        "type": "string",
+                                        "example": "Admin Diedit"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "adminbaru@detuna.com"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "enum": [
+                                            "pelanggan",
+                                            "admin"
+                                        ],
+                                        "example": "admin"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Pengguna berhasil diupdate",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Pengguna tidak ditemukan"
+                    },
+                    "422": {
+                        "description": "Validasi gagal"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Super Admin - Users"
+                ],
+                "summary": "Menghapus pengguna (Super Admin)",
+                "operationId": "6c43f8ed96d7d1dfa2f2ddf0f292657d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Pengguna berhasil dihapus"
+                    },
+                    "404": {
+                        "description": "Pengguna tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/superadmin/users": {
             "get": {
                 "tags": [
@@ -1021,110 +1169,30 @@
                 ]
             }
         },
-        "/api/v1/superadmin/users/{id}": {
-            "delete": {
-                "tags": [
-                    "Super Admin - Users"
-                ],
-                "summary": "Menghapus pengguna (Super Admin)",
-                "operationId": "6c43f8ed96d7d1dfa2f2ddf0f292657d",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Pengguna berhasil dihapus"
-                    },
-                    "404": {
-                        "description": "Pengguna tidak ditemukan"
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
         "/api/v1/register": {
             "post": {
                 "tags": [
-                    "Auth"
+                    "1. Autentikasi"
                 ],
-                "summary": "Registrasi Pengguna Baru",
+                "summary": "Registrasi pengguna baru",
                 "operationId": "ad77fe138bcb384ad65d167d5c8d1cc0",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "full_name",
-                                    "email",
-                                    "password",
-                                    "password_confirmation"
-                                ],
-                                "properties": {
-                                    "full_name": {
-                                        "type": "string",
-                                        "example": "John Doe"
-                                    },
-                                    "email": {
-                                        "type": "string",
-                                        "format": "email",
-                                        "example": "john@example.com"
-                                    },
-                                    "password": {
-                                        "type": "string",
-                                        "format": "password",
-                                        "example": "password123"
-                                    },
-                                    "password_confirmation": {
-                                        "type": "string",
-                                        "format": "password",
-                                        "example": "password123"
-                                    },
-                                    "phone_number": {
-                                        "type": "string",
-                                        "example": "08123456789"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
                 "responses": {
-                    "201": {
-                        "description": "Registrasi berhasil",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/User"
-                                }
-                            }
-                        }
-                    },
                     "422": {
-                        "description": "Validasi gagal"
+                        "description": "Validasi gagal (misal: email sudah terdaftar, password tidak cocok)"
+                    },
+                    "429": {
+                        "description": "Terlalu banyak percobaan (Rate Limit 10x per menit)"
                     }
                 }
             }
         },
-        "/api/v1/login": {
+        "/api/v1/auth/login": {
             "post": {
                 "tags": [
-                    "Auth"
+                    "1. Autentikasi"
                 ],
                 "summary": "Login Pengguna",
-                "operationId": "bae68d1c55329ecb6e41f48285840c8f",
+                "operationId": "a7997e7c1e3bfed64d4e56de82415931",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1173,6 +1241,12 @@
                     },
                     "401": {
                         "description": "Kredensial salah"
+                    },
+                    "422": {
+                        "description": "Kredensial salah"
+                    },
+                    "429": {
+                        "description": "Terlalu banyak percobaan (Rate Limit 10x per menit)"
                     }
                 }
             }
@@ -1761,6 +1835,45 @@
                 },
                 "type": "object"
             },
+            "ActivityLog": {
+                "title": "Activity Log",
+                "description": "Model Log Aktivitas",
+                "properties": {
+                    "log_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "action": {
+                        "type": "string",
+                        "example": "booking_updated"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Admin mengubah status booking..."
+                    },
+                    "model_type": {
+                        "type": "string",
+                        "example": "App\\Models\\Booking"
+                    },
+                    "model_id": {
+                        "type": "integer",
+                        "example": 101
+                    },
+                    "ip_address": {
+                        "type": "string",
+                        "example": "127.0.0.1"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
             "Booking": {
                 "title": "Booking",
                 "description": "Model Pemesanan",
@@ -2112,6 +2225,10 @@
     },
     "tags": [
         {
+            "name": "Super Admin - Activity Log",
+            "description": "Endpoint untuk melihat log aktivitas sistem (Super Admin)"
+        },
+        {
             "name": "Admin - Bookings",
             "description": "Endpoint untuk manajemen booking oleh Admin"
         },
@@ -2150,6 +2267,10 @@
         {
             "name": "Reviews (Pelanggan & Publik)",
             "description": "Endpoint untuk mengelola ulasan"
+        },
+        {
+            "name": "1. Autentikasi",
+            "description": "1. Autentikasi"
         },
         {
             "name": "Auth",

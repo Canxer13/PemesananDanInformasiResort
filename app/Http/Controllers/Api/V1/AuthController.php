@@ -14,21 +14,17 @@ class AuthController extends Controller
     /**
      * @OA\Post(
      * path="/api/v1/register",
-     * summary="Registrasi Pengguna Baru",
-     * tags={"Auth"},
-     * @OA\RequestBody(
-     * required=true,
-     * @OA\JsonContent(
-     * required={"full_name", "email", "password", "password_confirmation"},
-     * @OA\Property(property="full_name", type="string", example="John Doe"),
-     * @OA\Property(property="email", type="string", format="email", example="john@example.com"),
-     * @OA\Property(property="password", type="string", format="password", example="password123"),
-     * @OA\Property(property="password_confirmation", type="string", format="password", example="password123"),
-     * @OA\Property(property="phone_number", type="string", example="08123456789")
-     * )
+     * tags={"1. Autentikasi"},
+     * summary="Registrasi pengguna baru",
+
+     * @OA\Response(
+     * response=422,
+     * description="Validasi gagal (misal: email sudah terdaftar, password tidak cocok)"
      * ),
-     * @OA\Response(response=201, description="Registrasi berhasil", @OA\JsonContent(ref="#/components/schemas/User")),
-     * @OA\Response(response=422, description="Validasi gagal")
+     * @OA\Response(
+     * response=429,
+     * description="Terlalu banyak percobaan (Rate Limit 10x per menit)" 
+     * )
      * )
      */
     public function register(Request $request)
@@ -52,9 +48,9 @@ class AuthController extends Controller
 
     /**
      * @OA\Post(
-     * path="/api/v1/login",
+     * path="/api/v1/auth/login",
      * summary="Login Pengguna",
-     * tags={"Auth"},
+     * tags={"1. Autentikasi"},
      * @OA\RequestBody(
      * required=true,
      * @OA\JsonContent(
@@ -67,9 +63,18 @@ class AuthController extends Controller
      * @OA\Property(property="token", type="string", example="1|Abc..."),
      * @OA\Property(property="user", ref="#/components/schemas/User")
      * )),
-     * @OA\Response(response=401, description="Kredensial salah")
+     * @OA\Response(response=401, description="Kredensial salah"), 
+     * @OA\Response(
+     * response=422,
+     * description="Kredensial salah"
+     * ),
+     * @OA\Response(
+     * response=429,
+     * description="Terlalu banyak percobaan (Rate Limit 10x per menit)" 
+     * )
      * )
      */
+    
     public function login(Request $request)
     {
         $credentials = $request->validate([

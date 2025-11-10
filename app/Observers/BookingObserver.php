@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\Booking;
 use App\Models\ActivityLog;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model; // <-- INI ADALAH PERBAIKANNYA
 
 class BookingObserver
 {
@@ -13,7 +14,9 @@ class BookingObserver
      */
     public function created(Booking $booking): void
     {
-        $this->logActivity('booking_created', 'Booking baru #' . $booking->booking_code . ' telah dibuat.', $booking);
+        // Saat seeder berjalan, Auth::user() adalah null, jadi kita beri nama "Sistem"
+        $actor = Auth::user() ? Auth::user()->full_name : 'Sistem (Seeder)';
+        $this->logActivity('booking_created', 'Booking baru #' . $booking->booking_code . ' telah dibuat. (Oleh: ' . $actor . ')', $booking);
     }
 
     /**
@@ -50,7 +53,7 @@ class BookingObserver
             'description' => $description,
             'model_type' => get_class($model),
             'model_id' => $model->getKey(),
-            'ip_address' => request()->ip(),
+            'ip_address' => request()->ip(), // Akan null saat seeder, tapi tidak masalah (kolomnya nullable)
         ]);
     }
 }

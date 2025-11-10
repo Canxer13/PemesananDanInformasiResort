@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use App\Jobs\SendBookingConfirmationEmail;
 use OpenApi\Annotations as OA;
 
 /**
@@ -106,16 +107,19 @@ class BookingController extends Controller
             'payment_status' => 'sometimes|string|in:pending,paid,failed',
         ]);
 
-        // Update hanya jika data dikirim
-        if ($request->has('booking_status')) {
-            $booking->booking_status = $validatedData['booking_status'];
-        }
+        // Simpan status lama untuk perbandingan
+        $oldStatus = $booking->booking_status;
 
-        if ($request->has('payment_status')) {
-            $booking->payment_status = $validatedData['payment_status'];
-        }
+        $booking->update($validatedData);
 
-        $booking->save();
+        // === LOGIKA ASYNC DIMULAI DI SINI ===
+        // Jika status BARU adalah 'confirmed' DAN status LAMA BUKAN 'confirmed'
+        if ($booking->booking_status == 'confirmed' && $oldStatus != 'confirmed') {
+            // "Lemparkan" tugas ini ke latar belakang!
+            // Respons ke Admin akan langsung terkirim tanpa menunggu 3 detik.
+            SendBookingConfirmationEmail::dispatch($booking);
+        }
+        // === LOGIKA ASYNC SELESAI ===
 
         return response()->json(['success' => true, 'message' => 'Status booking diperbarui.', 'data' => $booking]);
     }

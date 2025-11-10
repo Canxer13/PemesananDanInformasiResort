@@ -29,8 +29,8 @@ Route::prefix('v1')->group(function () {
     // ==========================================
     // === Rute Publik (Tidak perlu login) ===
     // ==========================================
-    Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:10,1');
+    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
 
     // Rooms
     Route::get('/rooms', [RoomController::class, 'index']);
@@ -100,6 +100,7 @@ Route::prefix('v1')->group(function () {
             // Manajemen User
             Route::get('/users', [AdminUserController::class, 'index']);
             Route::post('/users/admin', [AdminUserController::class, 'createAdmin']);
+            Route::put('/users/{id}', [AdminUserController::class, 'update']);
             Route::delete('/users/{id}', [AdminUserController::class, 'destroy']);
 
             // BARU: Laporan
